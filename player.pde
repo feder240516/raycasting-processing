@@ -1,7 +1,7 @@
 class Player{
   float x, y, theta;
   static final float VISION = 60;
-  static final int NUM_RAYS = 80;
+  static final int NUM_RAYS = 640;
   final float SPEED = 5;
   
   Player(){

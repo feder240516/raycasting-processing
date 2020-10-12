@@ -21,8 +21,6 @@ class World{
   }
   
   float distanceToWall(Vector2d vRay, Vector2d vWall){
-    println(vRay);
-    println(vWall);
     float m1 = vRay.getSlope();
     float m2 = vWall.getSlope();
     float minv1 = vRay.getSlopeInv();
@@ -30,8 +28,9 @@ class World{
     float b1 = vRay.getCutY();
     float b2 = vWall.getCutY();
     float d1 = vRay.getCutX();
-    float d2 = vWall.getCutX(); 
-    
+    float d2 = vWall.getCutX();
+    //boolean s = true;
+    //if (s)return -1;
     // pendientes paralelas
     if((m1 > INF_THRESHOLD && m2 > INF_THRESHOLD) || abs(m2-m1) < ZERO_THRESHOLD){
       return -1;
@@ -54,7 +53,6 @@ class World{
       }else{
         float x = (b2-b1)/(m1-m2);
         float y = m1 * x + b1;
-        println(x,y);
         if (x >= min(vWall.startx,vWall.startx+vWall.dx)
             && x <= max(vWall.startx,vWall.startx+vWall.dx)
             && ((x>vRay.startx) == (vRay.dx > 0))){
@@ -71,7 +69,6 @@ class World{
     float minDist = Float.POSITIVE_INFINITY; 
     for(Wall wall: walls){
       float thisDist = distanceToWall(vRay,wall.vector);
-      if (thisDist > 0) println("collision: " + thisDist);
       if (thisDist > 0 && thisDist < minDist){
         
         selectedWall = wall;

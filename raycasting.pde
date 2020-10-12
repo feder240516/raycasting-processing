@@ -16,7 +16,7 @@ void draw(){
   fill(255);
   world.drawScreen();
   fill(0);
-  text(frameRate,100,100);
+  text(round(frameRate),100,100);
   //world.drawMap();
   /*print("x: " + p1.x);
   print(" y: " + p1.y);
