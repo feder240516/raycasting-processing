@@ -1,6 +1,7 @@
 class Player{
   float x, y, theta;
-  static final float VISION = 20;
+  static final float VISION = 60;
+  static final int NUM_RAYS = 80;
   final float SPEED = 5;
   
   Player(){
@@ -22,11 +23,15 @@ class Player{
   
   
   Vector2d[] getRays(){
-    Vector2d[] rays = new Vector2d[1];
     
-    for (int  i = 0; i < 1; ++i){
+    Vector2d[] rays = new Vector2d[NUM_RAYS];
+    
+    float dtheta = VISION / (NUM_RAYS + 1);
+    
+    for (int  i = 0; i < NUM_RAYS; ++i){
+      float thisTheta = theta - VISION / 2 + dtheta * (i+1);
       rays[i] = new Vector2d(this.x,this.y,
-                    cos(radians(theta)),sin(radians(theta)));
+                    cos(radians(thisTheta)),sin(radians(thisTheta)));
       
     }
     

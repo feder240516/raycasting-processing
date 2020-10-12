@@ -7,6 +7,8 @@ class Pair<T1,T2>{
   }
 }
 
+/*
+
 class DoubleOrInf{
   public boolean isInf;
   public float value;
@@ -30,3 +32,5 @@ class DoubleOrInf{
     return false;
   }
 }
+
+*/

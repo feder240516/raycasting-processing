@@ -4,6 +4,7 @@ final float ANGLE_STEP = 15;
 
 void setup(){
   size(640,360);
+  smooth(8);
   p1 = new Player();
   world = new World(p1);
   world.addWall(new Wall(100,20,120,200));
@@ -12,8 +13,11 @@ void setup(){
 void draw(){
   clear();
   background(128);
+  fill(255);
   world.drawScreen();
-  world.drawMap();
+  fill(0);
+  text(frameRate,100,100);
+  //world.drawMap();
   /*print("x: " + p1.x);
   print(" y: " + p1.y);
   print(" theta: " + p1.theta);

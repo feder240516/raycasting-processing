@@ -7,23 +7,37 @@ class Vector2d{
     this.dy = dy;
   }
   
-  DoubleOrInf getPendiente(){
-    if(dx == 0 || abs(dy / dx) > 1e4) return new DoubleOrInf();
-    else return new DoubleOrInf(dy/dx);
+  float getSlope(){
+    if(dx == 0 || abs(dy / dx) > INF_THRESHOLD) return Float.POSITIVE_INFINITY;
+    else return dy/dx;
   }
   
-  float getCorte(){
-    DoubleOrInf pendiente = getPendiente();
-    if (pendiente.isInf){
-      return 0;
+  float getSlopeInv(){
+    if(dy == 0 || abs(dx / dy) > INF_THRESHOLD) return Float.POSITIVE_INFINITY;
+    else return dx/dy;
+  }
+  
+  float getCutY(){
+    float slope = getSlope();
+    if (slope == Float.POSITIVE_INFINITY){
+      return Float.NaN;
     }else{
-      return starty - pendiente.value * startx; 
+      return starty - slope * startx; 
+    }
+  }
+  
+  float getCutX(){
+    float slopeInv = getSlopeInv();
+    if (slopeInv == Float.POSITIVE_INFINITY){
+      return Float.NaN;
+    }else{
+      return startx - slopeInv * starty; 
     }
   }
   
   String toString(){
     return String.format("v = (%f, %f) + t(%f, %f)",startx,starty,dx,dy) + "\n"
-        +  String.format("y = %fx + %f", getPendiente().value, getCorte());
+        +  String.format("y = %fx + %f", getSlope(), getCutY());
   }
   
 }
