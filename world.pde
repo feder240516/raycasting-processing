@@ -20,7 +20,7 @@ class World{
     walls.add(w);
   }
   
-  float distanceToWall(Vector2d vRay, Vector2d vWall){
+  Pair<Float,Pair<Float,Float>> distanceToWall(Vector2d vRay, Vector2d vWall){
     float m1 = vRay.getSlope();
     float m2 = vWall.getSlope();
     float minv1 = vRay.getSlopeInv();
@@ -33,7 +33,7 @@ class World{
     //if (s)return -1;
     // pendientes paralelas
     if((m1 > INF_THRESHOLD && m2 > INF_THRESHOLD) || abs(m2-m1) < ZERO_THRESHOLD){
-      return -1;
+      return new Pair(-1f,null);
     }else{
       /**
        * m1x + b1 = m2x + b2
@@ -47,35 +47,38 @@ class World{
         if (y >= min(vWall.starty, vWall.starty+vWall.dy)
             && y <= max(vWall.starty, vWall.starty+vWall.dy)
             && ((y>vRay.starty) == (vRay.dy > 0))){
-          return sqrt(pow(x-vRay.startx,2)+pow(y-vRay.starty,2));
+          return new Pair(sqrt(pow(x-vRay.startx,2)+pow(y-vRay.starty,2)), new Pair(x,y));
         }
-        return -1;
+        return new Pair(-1f,null);
       }else{
         float x = (b2-b1)/(m1-m2);
         float y = m1 * x + b1;
         if (x >= min(vWall.startx,vWall.startx+vWall.dx)
             && x <= max(vWall.startx,vWall.startx+vWall.dx)
             && ((x>vRay.startx) == (vRay.dx > 0))){
-              return sqrt(pow(x-vRay.startx,2)+pow(y-vRay.starty,2));
+              return new Pair(sqrt(pow(x-vRay.startx,2)+pow(y-vRay.starty,2)), new Pair(x,y));
         } else {
-          return -1;
+          return new Pair(-1f,null);
         }
       }
     }
   }
   
-  Pair<Wall,Float> checkRay(Vector2d vRay){
+  Tuple<Wall,Float,Pair<Float,Float>> checkRay(Vector2d vRay){
     Wall selectedWall = null;
-    float minDist = Float.POSITIVE_INFINITY; 
+    float minDist = Float.POSITIVE_INFINITY;
+    Pair<Float, Float> crashPosition = null;
     for(Wall wall: walls){
-      float thisDist = distanceToWall(vRay,wall.vector);
+      Pair<Float, Pair<Float, Float>> wallRay = distanceToWall(vRay,wall.vector);
+      float thisDist = (float) wallRay.first;
       if (thisDist > 0 && thisDist < minDist){
         
         selectedWall = wall;
         minDist = thisDist;
+        crashPosition = wallRay.second;
       }
     }
-    return new Pair<Wall,Float>(selectedWall,minDist);
+    return new Tuple(selectedWall,minDist,crashPosition);
   }
   
   void drawScreen(){
@@ -89,14 +92,17 @@ class World{
       int numRays = rays.length;
       
       for(int  i = 0; i < numRays; ++i){
-        Pair<Wall,Float> collision = checkRay(rays[i]);
+        Tuple<Wall,Float,Pair<Float,Float>> collision = checkRay(rays[i]);
         // print("hello\n");
         if (collision.first != null){
           // print("height: ");
           
           float objHeight = FULL_DISTANCE * height / collision.second;
           if (objHeight > height) objHeight = height;
-          stroke(255);
+          float x = collision.third.first;
+          float y = collision.third.second;
+          Color c = collision.first.getColorForPosition(x,y);
+          stroke(c.r,c.g,c.b);
           rect(i * width / numRays,(height-objHeight)/2,width / numRays,objHeight);
         }
       }
@@ -105,11 +111,12 @@ class World{
   }
   
   void drawMap(){
-    stroke(128,128,128,40);
-    circle(p1.x,p1.y,50);
+    stroke(128,0,0,40);
+    //circle(p1.x,p1.y,50);
     Vector2d[] rays = p1.getRays();
+    Vector2d[] raysToDraw = new Vector2d[]{rays[0], rays[rays.length-1]};
     
-    for(Vector2d ray: rays){
+    for(Vector2d ray: raysToDraw){
       float m = ray.getSlope();
       float b = ray.getCutY();
       if(m == Float.POSITIVE_INFINITY || m > INF_THRESHOLD){ 

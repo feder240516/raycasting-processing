@@ -7,17 +7,33 @@ void setup(){
   smooth(8);
   p1 = new Player();
   world = new World(p1);
-  world.addWall(new Wall(100,20,120,200));
+  world.addWall(new Wall(0,0,0,100));
+  world.addWall(new Wall(0,0,50,0));
+  world.addWall(new Wall(50,0,50,50));
+  //world.addWall(new Wall(0,50,0,100));
+  world.addWall(new Wall(0,100,50,100));
+  world.addWall(new Wall(50,100,50,150));
+  world.addWall(new Wall(100,0,100,50));
+  world.addWall(new Wall(100,50,150,100));
+  world.addWall(new Wall(100,100,150,100));
+  world.addWall(new Wall(100,100,100,150));
+  //world.addWall(new Wall(100,20,120,0));
+  //world.addWall(new Wall(50,20,0,20));
+  //world.addWall(new Wall(10,4,0,100));
+  //world.addWall(new Wall(100,20,120,200));
+  //world.addWall(new Wall(100,20,120,200));
+  //world.addWall(new Wall(100,20,120,200));
+  //world.addWall(new Wall(100,20,120,200));
 }
 
 void draw(){
   clear();
-  background(128);
+  background(0);
   fill(255);
   world.drawScreen();
   fill(0);
   text(round(frameRate),100,100);
-  //world.drawMap();
+  world.drawMap();
   /*print("x: " + p1.x);
   print(" y: " + p1.y);
   print(" theta: " + p1.theta);

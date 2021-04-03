@@ -5,8 +5,8 @@ class Player{
   final float SPEED = 5;
   
   Player(){
-    this.x = 0;
-    this.y = 0;
+    this.x = 25;
+    this.y = 25;
     this.theta = 0;
   }
   
